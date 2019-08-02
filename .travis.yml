@@ -23,5 +23,5 @@ deploy:
 
 script:
   - yarn lint
-  - yarn coverage
+  - yarn codecov
   - yarn build
