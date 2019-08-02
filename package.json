@@ -1,0 +1,40 @@
+{
+  "name": "c2w-lambda-api-dashboard",
+  "version": "1.0.0",
+  "description": "Cycle2work dashboard API",
+  "main": "bundle/index.js",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/cycle2work/c2w-lambda-api-dashboard"
+  },
+  "dependencies": {
+    "bunyan": "^1.8.12",
+    "core-js": "^3.1.4",
+    "dotenv": "^8.0.0",
+    "moment": "^2.19.1",
+    "mongodb": "^3.2.7",
+    "regenerator-runtime": "^0.13.3"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.5.5",
+    "@babel/core": "^7.5.5",
+    "@babel/preset-env": "^7.5.5",
+    "@types/jest": "^24.0.16",
+    "babel-jest": "^24.8.0",
+    "codecov": "^3.5.0",
+    "eslint": "^6.1.0",
+    "eslint-config-prettier": "^6.0.0",
+    "jest": "^24.8.0"
+  },
+  "scripts": {
+    "build": "babel src --out-dir bundle",
+    "codecov": "yarn coverage && codecov",
+    "coverage": "jest --coverage --forceExit",
+    "dev": "jest --watch",
+    "lint": "eslint src"
+  },
+  "jest": {
+    "verbose": true
+  }
+}
