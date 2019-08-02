@@ -1,6 +1,6 @@
 import { MongoClient } from "mongodb";
 
-import { MONGODB_URL, REPORTS_COLLECTION } from "../config";
+import { MONGODB_URL, MONGODB_NAME, REPORTS_COLLECTION } from "../config";
 
 let clientInstance;
 
@@ -17,7 +17,7 @@ export async function getMongoClient() {
 export async function retrieveReports(query) {
   const client = await getMongoClient();
   return await client
-    .db("test")
+    .db(MONGODB_NAME)
     .collection(REPORTS_COLLECTION)
     .find(query)
     .toArray();

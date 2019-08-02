@@ -2,6 +2,8 @@ import { getMongoClient } from "./services/mongo-db";
 
 import { handler } from "./";
 
+import { MONGODB_NAME, REPORTS_COLLECTION } from "./config";
+
 describe("`c2w-lambda-api-dashboard` APIs", () => {
   let client;
   let context;
@@ -11,7 +13,7 @@ describe("`c2w-lambda-api-dashboard` APIs", () => {
     client = await getMongoClient();
 
     await client
-      .db("test")
+      .db(MONGODB_NAME)
       .collection("reports")
       .insertMany([
         {
@@ -50,7 +52,7 @@ describe("`c2w-lambda-api-dashboard` APIs", () => {
   });
 
   afterAll(async () => {
-    await client.db("test").dropCollection("reports");
+    await client.db(MONGODB_NAME).dropCollection(REPORTS_COLLECTION);
 
     client.close();
   });

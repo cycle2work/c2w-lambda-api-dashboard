@@ -18,6 +18,7 @@ deploy:
   secret_access_key: $AWS_SECRET_ACCESS_KEY
   environment_variables:
     - MONGODB_URL=$MONGODB_URL
+    - MONGODB_NAME=$MONGODB_NAME
     - LOG_LEVEL=$LOG_LEVEL
 
 script:
