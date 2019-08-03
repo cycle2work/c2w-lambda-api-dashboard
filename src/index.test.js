@@ -17,33 +17,36 @@ describe("`c2w-lambda-api-dashboard` APIs", () => {
       .collection("reports")
       .insertMany([
         {
-          athlete: {
-            id: 1
-          },
+          athlete: { id: 1 },
+          club: { id: 1 },
           year: 2019,
           month: 10,
           distances: [1, 1, 1, 7]
         },
         {
-          athlete: {
-            id: 2
-          },
+          athlete: { id: 1 },
+          club: { id: 2 },
+          year: 2019,
+          month: 10,
+          distances: [8]
+        },
+        {
+          athlete: { id: 2 },
+          club: { id: 1 },
           year: 2019,
           month: 10,
           distances: [1, 1, 1, 7]
         },
         {
-          athlete: {
-            id: 1
-          },
+          athlete: { id: 1 },
+          club: { id: 1 },
           year: 2019,
           month: 11,
           distances: [25, 25]
         },
         {
-          athlete: {
-            id: 1
-          },
+          athlete: { id: 1 },
+          club: { id: 1 },
           year: 2018,
           month: 11,
           distances: [100]
@@ -78,7 +81,7 @@ describe("`c2w-lambda-api-dashboard` APIs", () => {
 
   it("return 200 and reports grouped by month", async () => {
     await handler(
-      { queryStringParameters: { year: "2019", athleteId: "1" } },
+      { queryStringParameters: { year: "2019", athleteId: "1", clubId: "1" } },
       context,
       callback
     );

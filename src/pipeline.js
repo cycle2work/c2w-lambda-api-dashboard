@@ -9,23 +9,26 @@ export default async (event, context, callback) => {
   try {
     const currentYear = moment.utc().year();
 
-    const { year = currentYear, athleteId } = event.queryStringParameters || {};
+    const { year = currentYear, athleteId, clubId } =
+      event.queryStringParameters || {};
 
-    if (!year || !athleteId) {
+    if (!year || !athleteId || !clubId) {
       throw new Error(
-        `Request parameters year or athleteId not provided year=${year} athleteId=${athleteId}`
+        `Request parameters year or athleteId not provided year=${year} athleteId=${athleteId} clubId=${clubId}`
       );
     }
 
     const parsedYear = parseInt(year);
     const parsedAthleteId = parseInt(athleteId);
+    const parsedClubId = parseInt(clubId);
 
     const reports = await retrieveReports({
       "athlete.id": parsedAthleteId,
+      "club.id": parsedClubId,
       year: parsedYear
     });
 
-    log.debug({ parsedYear, parsedAthleteId, reports });
+    log.debug({ parsedYear, parsedAthleteId, parsedClubId, reports });
 
     const monthlyTotal = reports.map(report => ({
       year: report.year,
