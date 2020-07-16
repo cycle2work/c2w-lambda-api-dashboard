@@ -1,24 +1,26 @@
-import { MongoClient } from "mongodb";
+import mongodb from "mongodb";
 
-import { MONGODB_URL, MONGODB_NAME, REPORTS_COLLECTION } from "../config";
+import { MONGODB_URL, MONGODB_NAME, PROCESSED_ACTIVITIES_COLLECTION } from "../config";
 
 let clientInstance;
 
 export async function getMongoClient() {
   if (!clientInstance) {
     /* eslint-disable-next-line */
-    clientInstance = await MongoClient.connect(MONGODB_URL, {
-      useNewUrlParser: true
+    clientInstance = await mongodb.connect(MONGODB_URL, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
     });
   }
   return clientInstance;
 }
 
-export async function retrieveReports(query) {
+export async function retrieveActivities(years, clubId) {
   const client = await getMongoClient();
   return await client
     .db(MONGODB_NAME)
-    .collection(REPORTS_COLLECTION)
-    .find(query)
+    .collection(PROCESSED_ACTIVITIES_COLLECTION)
+    .find({ clubId, year: { $in: years } })
+    .project({ _id: 0 })
     .toArray();
 }
