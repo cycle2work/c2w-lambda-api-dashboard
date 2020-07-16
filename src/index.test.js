@@ -2,7 +2,7 @@ import { getMongoClient } from "./services/mongo-db";
 
 import { handler } from "./";
 
-import { MONGODB_NAME, REPORTS_COLLECTION } from "./config";
+import { MONGODB_NAME, PROCESSED_ACTIVITIES_COLLECTION } from "./config";
 
 describe("`c2w-lambda-api-dashboard` APIs", () => {
   let client;
@@ -14,55 +14,63 @@ describe("`c2w-lambda-api-dashboard` APIs", () => {
 
     await client
       .db(MONGODB_NAME)
-      .collection("reports")
+      .collection(PROCESSED_ACTIVITIES_COLLECTION)
+      .deleteMany({});
+
+    await client
+      .db(MONGODB_NAME)
+      .collection(PROCESSED_ACTIVITIES_COLLECTION)
       .insertMany([
         {
-          athlete: { id: 1 },
-          club: { id: 1 },
-          year: 2019,
-          month: 10,
-          distances: [1, 1, 1, 7]
+          athleteId: 1,
+          clubId: 1,
+          year: 2020,
+          month: 3,
+          day: 8,
+          distance: 100,
         },
         {
-          athlete: { id: 1 },
-          club: { id: 2 },
-          year: 2019,
-          month: 10,
-          distances: [8]
+          athleteId: 2,
+          clubId: 1,
+          year: 2020,
+          month: 6,
+          day: 8,
+          distance: 50,
         },
         {
-          athlete: { id: 2 },
-          club: { id: 1 },
+          athleteId: 1,
+          clubId: 2,
           year: 2019,
-          month: 10,
-          distances: [1, 1, 1, 7]
+          month: 4,
+          day: 8,
+          distance: 20,
         },
         {
-          athlete: { id: 1 },
-          club: { id: 1 },
+          athleteId: 2,
+          clubId: 2,
           year: 2019,
           month: 11,
-          distances: [25, 25]
+          day: 8,
+          distance: 30,
         },
         {
-          athlete: { id: 1 },
-          club: { id: 1 },
+          athleteId: 1,
+          clubId: 1,
           year: 2018,
-          month: 11,
-          distances: [100]
-        }
+          month: 5,
+          day: 8,
+          distance: 100,
+        },
       ]);
   });
 
-  afterAll(async () => {
-    await client.db(MONGODB_NAME).dropCollection(REPORTS_COLLECTION);
-
+  afterAll(() => {
     client.close();
   });
 
   beforeEach(() => {
     context = {
-      succeed: jest.fn()
+      succeed: jest.fn(),
     };
     callback = jest.fn();
   });
@@ -74,38 +82,68 @@ describe("`c2w-lambda-api-dashboard` APIs", () => {
       statusCode: 400,
       headers: {
         "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Credentials": true
-      }
+        "Access-Control-Allow-Credentials": true,
+      },
     });
   });
 
-  it("return 200 and reports grouped by month", async () => {
+  it("should return 200 and 2017 and 2018 activities for the provided clubId", async () => {
     await handler(
-      { queryStringParameters: { year: "2019", athleteId: "1", clubId: "1" } },
+      { queryStringParameters: { years: "2017,2018", clubId: "1" } },
       context,
       callback
     );
 
     const expected = [
       {
-        year: 2019,
-        month: 10,
-        distance: 10
+        athleteId: 1,
+        clubId: 1,
+        year: 2018,
+        month: 5,
+        day: 8,
+        distance: 100,
       },
-      {
-        year: 2019,
-        month: 11,
-        distance: 50
-      }
     ];
 
     expect(callback).lastCalledWith(null, {
       statusCode: 200,
       headers: {
         "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Credentials": true
+        "Access-Control-Allow-Credentials": true,
       },
-      body: JSON.stringify(expected)
+      body: JSON.stringify(expected),
+    });
+  });
+
+  it("should return 200 and current year activities for the provided clubId", async () => {
+    await handler({ queryStringParameters: { clubId: "1" } }, context, callback);
+
+    const expected = [
+      {
+        athleteId: 1,
+        clubId: 1,
+        year: 2020,
+        month: 3,
+        day: 8,
+        distance: 100,
+      },
+      {
+        athleteId: 2,
+        clubId: 1,
+        year: 2020,
+        month: 6,
+        day: 8,
+        distance: 50,
+      },
+    ];
+
+    expect(callback).lastCalledWith(null, {
+      statusCode: 200,
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Credentials": true,
+      },
+      body: JSON.stringify(expected),
     });
   });
 });

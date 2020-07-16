@@ -1,50 +1,38 @@
 import moment from "moment";
 
 import { log } from "./services/logger";
-import { retrieveReports } from "./services/mongo-db";
+import { retrieveActivities } from "./services/mongo-db";
 
 export default async (event, context, callback) => {
   context.callbackWaitsForEmptyEventLoop = false;
 
   try {
-    const currentYear = moment.utc().year();
+    const currentYear = `${moment.utc().year()}`;
 
-    const { year = currentYear, athleteId, clubId } =
-      event.queryStringParameters || {};
+    const { years = currentYear, clubId } = event.queryStringParameters || {};
 
-    if (!year || !athleteId || !clubId) {
+    if (!years || !clubId) {
       throw new Error(
-        `Request parameters year or athleteId not provided year=${year} athleteId=${athleteId} clubId=${clubId}`
+        `Request parameters 'years' or 'clubId' not provided: years=${years} clubId=${clubId}`
       );
     }
 
-    const parsedYear = parseInt(year);
-    const parsedAthleteId = parseInt(athleteId);
+    const parsedYears = years.split(",").map((year) => parseInt(year));
     const parsedClubId = parseInt(clubId);
 
-    const reports = await retrieveReports({
-      "athlete.id": parsedAthleteId,
-      "club.id": parsedClubId,
-      year: parsedYear
-    });
+    log.debug({ parsedYears, parsedClubId });
 
-    log.debug({ parsedYear, parsedAthleteId, parsedClubId, reports });
+    const clubActivities = await retrieveActivities(parsedYears, parsedClubId);
 
-    const monthlyTotal = reports.map(report => ({
-      year: report.year,
-      month: report.month,
-      distance: report.distances.reduce((sum, distance) => sum + distance, 0)
-    }));
-
-    log.debug({ monthlyTotal });
+    log.debug({ clubActivities });
 
     callback(null, {
       statusCode: 200,
       headers: {
         "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Credentials": true
+        "Access-Control-Allow-Credentials": true,
       },
-      body: JSON.stringify(monthlyTotal)
+      body: JSON.stringify(clubActivities),
     });
   } catch (error) {
     log.error(error);
@@ -53,8 +41,8 @@ export default async (event, context, callback) => {
       statusCode: 400,
       headers: {
         "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Credentials": true
-      }
+        "Access-Control-Allow-Credentials": true,
+      },
     });
   }
 };
