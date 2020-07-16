@@ -11,7 +11,7 @@ deploy:
   function_name: "c2w-lambda-api-dashboard-$TRAVIS_BRANCH"
   region: "eu-west-1"
   role: "arn:aws:iam::881121095103:role/travis"
-  runtime: "nodejs8.10"
+  runtime: "nodejs12.x"
   module_name: "bundle/index"
   handler_name: "handler"
   access_key_id: $AWS_ACCESS_KEY_ID
