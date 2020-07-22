@@ -11,20 +11,22 @@
   "dependencies": {
     "bunyan": "^1.8.14",
     "core-js": "^3.6.5",
-    "dotenv": "^8.2.0",
     "moment": "^2.27.0",
     "mongodb": "^3.5.9",
-    "regenerator-runtime": "^0.13.5"
+    "regenerator-runtime": "^0.13.6"
   },
   "devDependencies": {
     "@babel/cli": "^7.10.5",
     "@babel/core": "^7.10.5",
     "@babel/preset-env": "^7.10.4",
+    "@commitlint/cli": "^9.1.1",
+    "@commitlint/config-conventional": "^9.1.1",
     "@types/jest": "^26.0.5",
     "babel-jest": "^26.1.0",
-    "codecov": "^3.7.1",
+    "codecov": "^3.7.2",
     "eslint": "^7.5.0",
     "eslint-config-prettier": "^6.11.0",
+    "husky": "^4.2.5",
     "jest": "^26.1.0",
     "prettier": "^2.0.5"
   },
