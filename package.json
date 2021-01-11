@@ -9,7 +9,7 @@
     "url": "https://github.com/cycle2work/c2w-lambda-api-dashboard"
   },
   "dependencies": {
-    "bunyan": "^1.8.14",
+    "bunyan": "^1.8.15",
     "core-js": "^3.6.5",
     "moment": "^2.27.0",
     "mongodb": "^3.5.9",
