@@ -16,7 +16,7 @@
     "regenerator-runtime": "^0.13.6"
   },
   "devDependencies": {
-    "@babel/cli": "^7.12.10",
+    "@babel/cli": "^7.12.16",
     "@babel/core": "^7.12.10",
     "@babel/preset-env": "^7.12.11",
     "@commitlint/cli": "^11.0.0",
