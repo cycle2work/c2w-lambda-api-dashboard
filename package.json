@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "bunyan": "^1.8.14",
-    "core-js": "^3.6.5",
+    "core-js": "^3.14.0",
     "moment": "^2.27.0",
     "mongodb": "^3.5.9",
     "regenerator-runtime": "^0.13.6"
